@@ -1,4 +1,4 @@
-package project.iksandecade.qrcode;
+package com.prototype.cashlesspayment;
 
 import org.junit.Test;
 

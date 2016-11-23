@@ -1,4 +1,4 @@
-package project.iksandecade.qrcode;
+package com.prototype.cashlesspayment;
 
 import android.content.Intent;
 import android.os.Bundle;

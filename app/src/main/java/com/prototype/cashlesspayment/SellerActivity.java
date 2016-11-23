@@ -1,8 +1,8 @@
-package project.iksandecade.qrcode;
+package com.prototype.cashlesspayment;
 
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,23 +13,25 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class PanitiaTopupActivity extends AppCompatActivity {
+public class SellerActivity extends AppCompatActivity {
     public final static int WIDTH = 500;
-    ImageView ivTopup;
-    EditText etTopup;
+    ImageView ivSeller;
+    EditText etSeller;
     ProgressBar pbLoad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_panitia_topup);
-        ivTopup = (ImageView) findViewById(R.id.ivTopup);
-        etTopup = (EditText) findViewById(R.id.etTopup);
+        setContentView(R.layout.activity_seller);
+        ivSeller = (ImageView) findViewById(R.id.ivSeller);
+        etSeller = (EditText) findViewById(R.id.etSeller);
         pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
         setLoading(false);
+
     }
 
     public void creates(View view) {
-        final String harga = "topup" + etTopup.getText().toString();
+        final String harga = "buy" + etSeller.getText().toString();
         setLoading(true);
         Thread t = new Thread(new Runnable() {
             public void run() {
@@ -44,7 +46,7 @@ public class PanitiaTopupActivity extends AppCompatActivity {
                                     Bitmap bitmap = null;
 
                                     bitmap = encodeAsBitmap(harga);
-                                    ivTopup.setImageBitmap(bitmap);
+                                    ivSeller.setImageBitmap(bitmap);
                                     setLoading(false);
                                 } catch (WriterException e) {
                                     e.printStackTrace();
@@ -89,10 +91,10 @@ public class PanitiaTopupActivity extends AppCompatActivity {
 
     public void setLoading(Boolean status) {
         if (status) {
-            ivTopup.setVisibility(View.GONE);
+            ivSeller.setVisibility(View.GONE);
             pbLoad.setVisibility(View.VISIBLE);
         } else {
-            ivTopup.setVisibility(View.VISIBLE);
+            ivSeller.setVisibility(View.VISIBLE);
             pbLoad.setVisibility(View.GONE);
         }
     }

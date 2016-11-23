@@ -1,10 +1,9 @@
-package project.iksandecade.qrcode;
+package com.prototype.cashlesspayment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -13,28 +12,30 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class SellerActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ShowQRCodeActivity extends AppCompatActivity {
     public final static int WIDTH = 500;
-    ImageView ivSeller;
-    EditText etSeller;
+    ImageView ivBarCode;
     ProgressBar pbLoad;
+    List<String> stringList = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seller);
-        ivSeller = (ImageView) findViewById(R.id.ivSeller);
-        etSeller = (EditText) findViewById(R.id.etSeller);
+        setContentView(R.layout.activity_show_qrcode);
+        ivBarCode = (ImageView) findViewById(R.id.ivBarcode);
         pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
-        setLoading(false);
-
-    }
-
-    public void creates(View view) {
-        final String harga = "buy" + etSeller.getText().toString();
         setLoading(true);
         Thread t = new Thread(new Runnable() {
             public void run() {
+                stringList.add("VIP");
+                stringList.add("Reguler");
+                stringList.add("Premium");
+                Collections.shuffle(stringList);
 
                 try {
                     synchronized (this) {
@@ -45,8 +46,8 @@ public class SellerActivity extends AppCompatActivity {
                                 try {
                                     Bitmap bitmap = null;
 
-                                    bitmap = encodeAsBitmap(harga);
-                                    ivSeller.setImageBitmap(bitmap);
+                                    bitmap = encodeAsBitmap(stringList.get(0));
+                                    ivBarCode.setImageBitmap(bitmap);
                                     setLoading(false);
                                 } catch (WriterException e) {
                                     e.printStackTrace();
@@ -64,8 +65,11 @@ public class SellerActivity extends AppCompatActivity {
             }
         });
         t.start();
+
     }
 
+
+    // this is method call from on create and return bitmap image of QRCode.
     Bitmap encodeAsBitmap(String str) throws WriterException {
         BitMatrix result;
         try {
@@ -91,11 +95,12 @@ public class SellerActivity extends AppCompatActivity {
 
     public void setLoading(Boolean status) {
         if (status) {
-            ivSeller.setVisibility(View.GONE);
+            ivBarCode.setVisibility(View.GONE);
             pbLoad.setVisibility(View.VISIBLE);
         } else {
-            ivSeller.setVisibility(View.VISIBLE);
+            ivBarCode.setVisibility(View.VISIBLE);
             pbLoad.setVisibility(View.GONE);
         }
     }
+
 }

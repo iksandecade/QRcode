@@ -1,21 +1,22 @@
-package project.iksandecade.qrcode;
+package com.prototype.cashlesspayment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class BuyActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_buy);
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
 
@@ -40,12 +41,28 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Log.e("handler", result.getText()); // Prints scan results
         Log.e("handler", result.getBarcodeFormat().toString()); // Prints the scan format (qrcode)
 
-        mScannerView.stopCamera();
-        Intent intent = new Intent();
-        intent.putExtra("msg", result.getText());
-        setResult(2, intent);
-        finish();
 
-
+        String saldo = result.getText();
+        int isBuy = saldo.indexOf("buy");
+        if (isBuy == 0) {
+            saldo = saldo.replace("buy", "");
+            int topup = Integer.parseInt(saldo);
+            topup = SPQrCode.getSaldo(this) - topup;
+            if (topup < 0) {
+                Toast.makeText(this, "Saldo anda tidak mencukupi", Toast.LENGTH_SHORT).show();
+            } else {
+                SPQrCode.setSALDO(topup, this);
+                Toast.makeText(this, "Buy Berhasil", Toast.LENGTH_SHORT).show();
+            }
+            Intent intent = new Intent();
+            intent.putExtra("MESSAGE", "HELO");
+            setResult(2, intent);
+            mScannerView.stopCamera();
+            finish();
+        } else {
+            Toast.makeText(this, "Buy gagal", Toast.LENGTH_SHORT).show();
+            mScannerView.stopCamera();
+            finish();
+        }
     }
 }
